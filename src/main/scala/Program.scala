@@ -19,7 +19,7 @@ object Program {
   }
 
   case class Var     (name : String)             extends Expr
-  case class IntConst(value : BigInt)            extends Expr
+  case class IntConst(value : Int)            extends Expr
   case class Plus    (left : Expr, right : Expr) extends Expr
   case class Times   (left : Expr, right : Expr) extends Expr
 
@@ -111,7 +111,7 @@ object ExprTest extends App {
 
     implicit val store : SymbStore = Map(x -> "x", y -> "y")
 
-    for (encoder <- List(IntExprEncoder, new BVExprEncoder (32))) {
+    for (encoder <- List(IntExprEncoder)) {
       import encoder._
 
       println("  sort " + IntType)
@@ -171,6 +171,22 @@ object ExampleProg2 {
     Assert(x === a)
   )
 
+}
+
+object ExampleProg3 {
+
+  import Program._
+
+  val a = Var("a")
+  val b = Var("b")
+
+  val p = Prog(
+    a := a + 1,
+    b := (a + b) - 3, 
+    If (a === b) (
+        Assert(a =/= 0)
+    )
+  )
 }
 
 object ProgTest extends App {
