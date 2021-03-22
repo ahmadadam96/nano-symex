@@ -16,6 +16,7 @@ object Program {
     def >(that : Expr)   = Leq(that + 1, this)
     def ===(that : Expr) = Eq(that, this)
     def =/=(that : Expr) = !Eq(that, this)
+    def arr(that : Expr) = ArElement(this, that)
   }
 
   case class Var     (name : String,
@@ -23,6 +24,8 @@ object Program {
   case class IntConst(value : BigInt)                     extends Expr
   case class Plus    (left : Expr, right : Expr)          extends Expr
   case class Times   (left : Expr, right : Expr)          extends Expr
+  case class ArElement(array : String, index: BigInt, 
+                      ptype : PType.Value = PType.PArray) extends Expr
 
   implicit def int2Expr(v : Int) : Expr = IntConst(v)
 
@@ -81,6 +84,11 @@ object Program {
 
   implicit def var2LHS(v : Var) = new AnyRef {
     def :=(that : Expr) = Assign(v, that)
+  }
+
+// TODO, this is probably wrong.
+  implicit def arr2LHS(v: ArElement) = new AnyRef {
+    def :=(that: Expr) = Assign(v, that)
   }
 
   implicit def ite2RichIte(p : IfThenElse) = new AnyRef {

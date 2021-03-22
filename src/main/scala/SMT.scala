@@ -51,6 +51,8 @@ abstract class SMT {
    */
   def getSatValue(name : String) : BigInt
 
+  def getArrayValue(name : String) : Map[BigInt, BigInt]
+
   /**
    * Reset the SMT solver to the initial state.
    */
@@ -133,6 +135,14 @@ abstract class SMTProcess(cmd : Array[String]) extends SMT {
     readLine match {
       case numberPattern.unanchored(assignment) => BigInt(assignment)
       case str => 0
+    }
+  }
+
+// TODO get the pattern matching correct
+  def getArrayValue(name : String) : Map[BigInt, BigInt] = {
+    sendCommand("(get-value (" + name + "))")
+    readLine match {
+      case numberPattern.
     }
   }
 
