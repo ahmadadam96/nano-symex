@@ -119,12 +119,10 @@ abstract class SMTProcess(cmd : Array[String]) extends SMT {
     readLine match {
       case null =>
         throw new SMTException("solver crashed")
-      case "sat" => {
-        println("this is sat")
-	true }
-      case "unsat" => {
-        println("this is not sat")
-        false }
+      case "sat" =>
+        true
+      case "unsat" =>
+        false
       case str =>
         throw new SMTException("unexpected answer from solver: " + str)
     }

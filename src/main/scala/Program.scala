@@ -117,7 +117,7 @@ object ExprTest extends App {
 
     implicit val store : SymbStore = Map(x -> "x", y -> "y")
 
-    for (encoder <- List(IntExprEncoder)) {
+    for (encoder <- List(IntExprEncoder, new BVExprEncoder (32))) {
       import encoder._
 
       println("  sort " + IntType)
