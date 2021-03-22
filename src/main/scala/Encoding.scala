@@ -87,13 +87,14 @@ class BVExprEncoder(width : Int) extends ExprEncoder {
     case Plus(l, r)  => "(bvadd " + encode(l) + " " + encode(r) + ")"
     case Times(l, r) => "(bvmul " + encode(l) + " " + encode(r) + ")"
   }
-  
-  def eval(expr : BExpr, valuation : Valuation) : Boolean = expr match {
-    case Eq(l, r)    => (eval(l,valuation) == eval(r,valuation))
-    case Leq(l, r)   => (eval(l,valuation) <= eval(r,valuation))
-    case Not(s)      => (!eval(s,valuation))
-    case And(l, r)   => (eval(l,valuation) && eval(r,valuation))
-    case Or(l, r)    => (eval(l,valuation) || eval(r,valuation))
+
+  def encode(expr : BExpr)
+            (implicit store : SymbStore) : String = expr match {
+    case Eq(l, r)    => "(= "     + encode(l) + " " + encode(r) + ")"
+    case Leq(l, r)   => "(bvsle " + encode(l) + " " + encode(r) + ")"
+    case Not(s)      => "(not "   + encode(s) + ")"
+    case And(l, r)   => "(and "   + encode(l) + " " + encode(r) + ")"
+    case Or(l, r)    => "(or "    + encode(l) + " " + encode(r) + ")"
   }
 
   def eval(expr : Expr, valuation: Valuation) : BigInt = ???
@@ -101,5 +102,4 @@ class BVExprEncoder(width : Int) extends ExprEncoder {
   def eval(expr : BExpr, valuation: Valuation) : Boolean = ???
 
 }
-
 
