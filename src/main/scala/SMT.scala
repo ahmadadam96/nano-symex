@@ -49,7 +49,7 @@ abstract class SMT {
   /**
    * Query the value of a given constant.
    */
-  def getSatValue(name : String) : Int
+  def getSatValue(name : String) : BigInt
 
   /**
    * Reset the SMT solver to the initial state.
@@ -130,11 +130,10 @@ abstract class SMTProcess(cmd : Array[String]) extends SMT {
     }
   }
 
-  def getSatValue(name : String) : Int = {
+  def getSatValue(name : String) : BigInt = {
     sendCommand("(get-value (" + name + "))")
     readLine match {
-      case numberPattern.unanchored(assignment) =>
-        assignment.toInt
+      case numberPattern.unanchored(assignment) => BigInt(assignment)
       case str => 0
     }
   }
