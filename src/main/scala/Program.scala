@@ -24,8 +24,7 @@ object Program {
   case class IntConst(value : BigInt)                     extends Expr
   case class Plus    (left : Expr, right : Expr)          extends Expr
   case class Times   (left : Expr, right : Expr)          extends Expr
-  case class ArElement(array : String, index: BigInt, 
-                      ptype : PType.Value = PType.PArray) extends Expr
+  case class ArElement(array : Expr, index: Expr) extends Expr
 
   implicit def int2Expr(v : Int) : Expr = IntConst(v)
 

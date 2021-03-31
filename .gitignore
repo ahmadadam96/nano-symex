@@ -2,3 +2,6 @@ target
 project
 z3-*
 *~
+.metals
+.vscode
+.bloop
