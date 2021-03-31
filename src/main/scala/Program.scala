@@ -146,6 +146,38 @@ object ExprTest extends App {
 
 }
 
+object InsertionSort {
+
+  import Program._
+
+  val A = Var("A", ptype = PType.PArray)
+  val len = Var("len")
+  val i = Var("i")
+  val j = Var("j")
+  val x = Var("x")
+  val y = Var("y")
+
+  val p = Prog(
+    i := 1,
+    While(i < len) (
+      x := A.arr(i),
+      j := j-1,
+      While(j >= 0 & A.arr(j) > x)(
+        A.arr(j+1) := A.arr(j),
+        j := j-1
+      ),
+      A.arr(j+1) := x,
+      i := i+1
+    ),
+    i := 1,
+    While(i+1 < len)(
+      Assert(A.arr(i) <= A.arr(i+1)),
+      i := i+1
+    )
+  )
+
+}
+
 object ExampleProg {
 
   import Program._
@@ -205,5 +237,11 @@ object ExampleProg3 {
 object ProgTest extends App {
 
   println(ExampleProg.p)
+
+}
+
+object InsertionTest extends App {
+
+  println(InsertionSort.p)
 
 }
