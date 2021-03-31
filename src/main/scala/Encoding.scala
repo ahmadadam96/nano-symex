@@ -31,6 +31,7 @@ object IntExprEncoder extends ExprEncoder {
   import Program._
 
   val IntType : String = "Int"
+  val ArrayType : String = "(Array " + IntType + " " + IntType + ")"
 
   def encode(expr : Expr)
             (implicit store : SymbStore) : String = expr match {
@@ -38,6 +39,8 @@ object IntExprEncoder extends ExprEncoder {
     case IntConst(v) => if (v >= 0) v.toString else ("(- " + -v + ")")
     case Plus(l, r)  => "(+ " + encode(l) + " " + encode(r) + ")"
     case Times(l, r) => "(* " + encode(l) + " " + encode(r) + ")"
+    // TODO check if this is correct
+    case ArElement(a, i) => ("(select ( " + encode(a) + " " + encode(i) + "))")
   }
 
   def encode(expr : BExpr)
