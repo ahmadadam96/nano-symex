@@ -159,6 +159,7 @@ object InsertionSort {
 
   val p = Prog(
     i := 1,
+    len := 10,
     While(i < len) (
       x := ArElement("a1", i),
       j := j-1,

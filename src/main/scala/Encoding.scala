@@ -60,7 +60,7 @@ object IntExprEncoder extends ExprEncoder {
     case Plus(l, r)  => (eval(l,valuation) + eval(r,valuation))
     case Times(l, r) => (eval(l,valuation) * eval(r,valuation))
     // TODO, fix below line
-    case ArElement(a, i) => a
+    // case ArElement(a, i) => a
   }
   
   def eval(expr : BExpr, valuation : Valuation) : Boolean = expr match {

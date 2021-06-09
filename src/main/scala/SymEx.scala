@@ -44,17 +44,18 @@ class SymEx(encoder : ExprEncoder, spawnSMT : => SMT) {
       execHelp(Sequence(p1, Sequence(p2, p3)), ops, depth)
 
     case Sequence(op@Assign(lhs : Var, rhs), rest) => {
-      val newConst = if(lhs.ptype == PInt) freshConst(IntType) else freshConst(ArrayType)
-
       if(lhs.ptype == PInt) {
+        val newConst = freshConst(IntType)
         addAssertion("(= " + newConst + " " + encode(rhs) + ")")
+        val newStore = store + (lhs -> newConst)
+        execHelp(rest, op :: ops, depth)(newStore)
       }
       else {
-        addAssertion("(store " + newConst + " " + encode(rhs) + ")")
+        addAssertion("(store " + lhs.name + " " + encode(rhs) + ")")
+        val newStore = store + (lhs -> lhs.name)
+        execHelp(rest, op :: ops, depth)(newStore)
       }
 
-      val newStore = store + (lhs -> newConst)
-      execHelp(rest, op :: ops, depth)(newStore)
     }
 
     case Sequence(IfThenElse(cond, b1, b2), rest) => {
