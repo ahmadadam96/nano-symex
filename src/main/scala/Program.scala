@@ -150,7 +150,7 @@ object InsertionSort {
 
   import Program._
 
-  val A = Var("A", ptype = PType.PArray)
+  val A = Var("a1", ptype = PType.PArray)
   val len = Var("len")
   val i = Var("i")
   val j = Var("j")
@@ -160,18 +160,18 @@ object InsertionSort {
   val p = Prog(
     i := 1,
     While(i < len) (
-      x := ArElement("A", i),
+      x := ArElement("a1", i),
       j := j-1,
-      While(j >= 0 & ArElement("A", j) > x)(
-        ArElement("A", j+1) := ArElement("A", j),
+      While(j >= 0 & ArElement("a1", j) > x)(
+        ArElement("a1", j+1) := ArElement("a1", j),
         j := j-1
       ),
-      ArElement("A", j+1) := x,
+      ArElement("a1", j+1) := x,
       i := i+1
     ),
     i := 1,
     While(i+1 < len)(
-      Assert(ArElement("A", i) <= ArElement("A", i+1)),
+      Assert(ArElement("a1", i) <= ArElement("a1", i+1)),
       i := i+1
     )
   )

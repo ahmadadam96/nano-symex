@@ -20,6 +20,8 @@ class SymEx(encoder : ExprEncoder, spawnSMT : => SMT) {
   def exec(p : Prog, variables : Seq[Var], depth : Int = Integer.MAX_VALUE) = {
     for (v@Var(name, PInt) <- variables)
       declareConst(name, IntType)
+    for (v@Var(name, PArray) <- variables)
+      declareConst(name, ArrayType)
     val store =
       (for (v@Var(name, PInt) <- variables) yield (v -> name)).toMap
 
@@ -111,5 +113,15 @@ object SymExTest2 extends App {
   val symex = new SymEx(IntExprEncoder, new Z3SMT)
 
   symex.exec(p, List(a, x), 200)
+
+}
+
+object InsertionProgTest extends App {
+
+  import InsertionSort._
+
+  val symex = new SymEx(IntExprEncoder, new Z3SMT)
+
+  symex.exec(p, List(A, len, i, j, x, y))
 
 }
