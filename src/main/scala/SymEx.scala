@@ -10,6 +10,7 @@ class SymEx(encoder : ExprEncoder, spawnSMT : => SMT) {
   import encoder._
   import Program._
   import PType.PInt
+  import PType.PArray
   import smt._
 
   def shutdown = smt.shutdown
@@ -41,8 +42,15 @@ class SymEx(encoder : ExprEncoder, spawnSMT : => SMT) {
       execHelp(Sequence(p1, Sequence(p2, p3)), ops, depth)
 
     case Sequence(op@Assign(lhs : Var, rhs), rest) => {
-      val newConst = freshConst(IntType)
-      addAssertion("(= " + newConst + " " + encode(rhs) + ")")
+      val newConst = if(lhs.ptype == PInt) freshConst(IntType) else freshConst(ArrayType)
+
+      if(lhs.ptype == PInt) {
+        addAssertion("(= " + newConst + " " + encode(rhs) + ")")
+      }
+      else {
+        addAssertion("(store " + newConst + " " + encode(rhs) + ")")
+      }
+
       val newStore = store + (lhs -> newConst)
       execHelp(rest, op :: ops, depth)(newStore)
     }

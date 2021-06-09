@@ -8,6 +8,8 @@ abstract class ExprEncoder {
 
   val IntType : String
 
+  val ArrayType : String
+
   type Valuation = Map[Var, BigInt]
 
   type SymbStore = Map[Var, String]
@@ -31,7 +33,7 @@ object IntExprEncoder extends ExprEncoder {
   import Program._
 
   val IntType : String = "Int"
-  val ArrayType : String = "(Array " + IntType + " " + IntType + ")"
+  val ArrayType : String = "Array"
 
   def encode(expr : Expr)
             (implicit store : SymbStore) : String = expr match {
@@ -40,7 +42,7 @@ object IntExprEncoder extends ExprEncoder {
     case Plus(l, r)  => "(+ " + encode(l) + " " + encode(r) + ")"
     case Times(l, r) => "(* " + encode(l) + " " + encode(r) + ")"
     // TODO check if this is correct
-    case ArElement(a, i) => ("(select ( " + encode(a) + " " + encode(i) + "))")
+    case ArElement(a, i) => ("(select ( " + a + " " + encode(i) + "))")
   }
 
   def encode(expr : BExpr)
@@ -57,6 +59,8 @@ object IntExprEncoder extends ExprEncoder {
     case IntConst(v) => v
     case Plus(l, r)  => (eval(l,valuation) + eval(r,valuation))
     case Times(l, r) => (eval(l,valuation) * eval(r,valuation))
+    // TODO, fix below line
+    case ArElement(a, i) => a
   }
   
   def eval(expr : BExpr, valuation : Valuation) : Boolean = expr match {
@@ -78,6 +82,8 @@ class BVExprEncoder(width : Int) extends ExprEncoder {
   import Program._
 
   val IntType : String = "(_ BitVec " + width + ")"
+
+  val ArrayType : String = "Array"
 
   def encode(expr : Expr)
             (implicit store : SymbStore) : String = expr match {

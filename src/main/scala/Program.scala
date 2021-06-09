@@ -16,7 +16,6 @@ object Program {
     def >(that : Expr)   = Leq(that + 1, this)
     def ===(that : Expr) = Eq(that, this)
     def =/=(that : Expr) = !Eq(that, this)
-    def arr(that : Expr) = ArElement(this, that)
   }
 
   case class Var     (name : String,
@@ -24,14 +23,15 @@ object Program {
   case class IntConst(value : BigInt)                     extends Expr
   case class Plus    (left : Expr, right : Expr)          extends Expr
   case class Times   (left : Expr, right : Expr)          extends Expr
-  case class ArElement(array : Expr, index: Expr) extends Expr
+  case class ArElement(array : String, index: Expr)       extends Expr
 
   implicit def int2Expr(v : Int) : Expr = IntConst(v)
 
   object PType extends Enumeration {
-    // TODO: PArray is not handled yet
-    val PInt, PArray = Value
+    val PInt = Value
+    val PArray = Value
   }
+
 
   //////////////////////////////////////////////////////////////////////////////
 
@@ -160,18 +160,18 @@ object InsertionSort {
   val p = Prog(
     i := 1,
     While(i < len) (
-      x := A.arr(i),
+      x := ArElement("A", i),
       j := j-1,
-      While(j >= 0 & A.arr(j) > x)(
-        A.arr(j+1) := A.arr(j),
+      While(j >= 0 & ArElement("A", j) > x)(
+        ArElement("A", j+1) := ArElement("A", j),
         j := j-1
       ),
-      A.arr(j+1) := x,
+      ArElement("A", j+1) := x,
       i := i+1
     ),
     i := 1,
     While(i+1 < len)(
-      Assert(A.arr(i) <= A.arr(i+1)),
+      Assert(ArElement("A", i) <= ArElement("A", i+1)),
       i := i+1
     )
   )
